@@ -42,6 +42,9 @@ void Inventory::add(int slot, Item* item)
 	if (items_[slot].size() >= kStackMax)
 		return;
 
+	if (!items_[slot].empty() && typeid(*item) != typeid(*items_[slot].back))
+		return;
+	
 	items_[slot].push_back(item);
 }
  
@@ -70,7 +73,8 @@ int Inventory::findSuitableSlot(Item* item)
 	// 1. there is a stack of same items with size < MAX
 	for (int i = 0; i < kNumSlots; ++i) {
 		if (items_[i].size() > 0 
-				&& items_[i][0]->kind() == item->kind() 
+				//&& items_[i][0]->kind() == item->kind() 
+				&& typeid(*items_[i][0]) == typeid(*item)
 				&& items_[i].size() < kStackMax) {
 			return i;
 		}
